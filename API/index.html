@@ -160,10 +160,7 @@
           DET: 1610612765, CHA: 1610612766
         };
 
-        // in case the API uses a different abbreviation
         const abbrAliases = { GS: 'GSW', NY: 'NYK', SA: 'SAS', NO: 'NOP', BK: 'BKN', PHO: 'PHX', UTAH: 'UTA', WSH: 'WAS', CHO: 'CHA', NOR: 'NOP' };
-
-        // returns the logo <img> html, or the abbreviation text if no logo is found
         function logoHtml(abbreviation, size) {
           var abbr = (abbreviation || '').toUpperCase();
           abbr = abbrAliases[abbr] || abbr;
@@ -175,11 +172,10 @@
         }
 
         function capitalizeFirstLetter(str) {
-            if (!str) return str; // Handle empty strings safely
+            if (!str) return str; 
             return str.charAt(0).toUpperCase() + str.slice(1);
         }
 
-        // element initializations
         var elCurrentPage = document.getElementById("currentpage");
         var elParent = document.getElementById("parent");
 
@@ -192,17 +188,14 @@
             page = parseInt(page);
         }
 
-        //api variables
         var apiKey = 'DcjjykXhWaR67kcPOzmY8qsCrGeDG4UeYJI2nC9P';
         var apiUrl = 'https://api.api-ninjas.com/v1/basketballteams?league=nba';
         var teams = [];
 
-        //pagination variables
         var perPage = 6;
-        var finalPage = 1; // set after the teams are loaded
+        var finalPage = 1; 
 
         const getTeams = async () => {
-            // Show loading spinner while fetching
             elParent.innerHTML = `
               <div class="col-12 text-center py-5">
                 <div class="h3 my-3 text-muted" id="name">
@@ -214,7 +207,6 @@
             `;
             elCurrentPage.innerHTML = page;
 
-            // only call the API once, then reuse the list for every page
             if (teams.length == 0) {
                 const response = await fetch(apiUrl, {
                     headers: { 'X-Api-Key': apiKey }
@@ -254,7 +246,6 @@
             }
         }
 
-        //pagination functions
         function prev() {
             page -= 1;
             if (page == 0) {

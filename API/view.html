@@ -151,10 +151,8 @@
       DET: 1610612765, CHA: 1610612766
     };
 
-    // in case the API uses a different abbreviation
     const abbrAliases = { GS: 'GSW', NY: 'NYK', SA: 'SAS', NO: 'NOP', BK: 'BKN', PHO: 'PHX', UTAH: 'UTA', WSH: 'WAS', CHO: 'CHA', NOR: 'NOP' };
 
-    // returns the logo <img> html, or the abbreviation text if no logo is found
     function logoHtml(abbreviation, size) {
       var abbr = (abbreviation || '').toUpperCase();
       abbr = abbrAliases[abbr] || abbr;
@@ -166,11 +164,10 @@
     }
 
     function capitalizeFirstLetter(str) {
-      if (!str) return str; // Handle empty strings safely
+      if (!str) return str;
       return str.charAt(0).toUpperCase() + str.slice(1);
     }
-
-    // element initializations
+s
     var elBack = document.getElementById("back");
     var elParent = document.getElementById("parent");
 
@@ -184,16 +181,15 @@
       page = parseInt(page);
     }
 
-    // go back to the same page of the list
     elBack.href = 'index.html?page=' + page;
 
-    //api variables
+
     var apiKey = 'DcjjykXhWaR67kcPOzmY8qsCrGeDG4UeYJI2nC9P';
     var teamUrl = 'https://api.api-ninjas.com/v1/basketballteams?team=';
     var playersUrl = 'https://api.api-ninjas.com/v1/basketballplayers?league=nba&team=';
 
     const getTeam = async () => {
-      // Show loading spinner while fetching team & roster data
+
       elParent.innerHTML = `
         <div class="col-12 text-center py-5">
           <div class="h3 my-3 text-muted" id="name">
