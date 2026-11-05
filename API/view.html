@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hoops - Team View</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+      body {
+          background-color: #f7f8f9;
+          color: #1e2d3d;
+          font-family: 'Roboto', sans-serif;
+          min-height: 100vh;
+      }
+
+      .nba-header {
+          background: linear-gradient(180deg, #1d428a 0%, #17356e 100%);
+          border-bottom: 3px solid #c8102e;
+      }
+
+      .nba-title {
+          font-family: 'Oswald', sans-serif;
+          letter-spacing: 2px;
+          font-weight: 700;
+          text-transform: uppercase;
+      }
+
+      .nba-card {
+          background-color: #ffffff;
+          border: 1px solid #e1e3e5;
+          border-radius: 8px;
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .nba-card:hover {
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      }
+
+      .nba-badge {
+          font-weight: 600;
+          font-size: 0.85rem;
+          color: #112233 !important;
+          letter-spacing: 0.5px;
+      }
+
+      .nba-badge-sub {
+          background-color: #f0f2f4 !important;
+          color: #1e2d3d !important;
+          border: 1px solid #e1e3e5;
+          font-size: 0.85rem;
+          font-weight: 500;
+      }
+
+      .btn-nba-back {
+          background-color: transparent;
+          border: 2px solid #c8102e;
+          color: #c8102e;
+          font-family: 'Oswald', sans-serif;
+          letter-spacing: 1px;
+          text-transform: uppercase;
+          padding: 6px 20px;
+          transition: all 0.2s ease;
+      }
+
+      .btn-nba-back:hover {
+          background-color: #c8102e;
+          color: #ffffff;
+          border-color: #c8102e;
+      }
+
+      .section-heading {
+          font-family: 'Oswald', sans-serif;
+          letter-spacing: 1px;
+          text-transform: uppercase;
+          color: #1e2d3d;
+          border-left: 4px solid #c8102e;
+          padding-left: 12px;
+      }
+
+      .team-heading {
+          font-family: 'Oswald', sans-serif;
+          letter-spacing: 0.5px;
+          text-transform: uppercase;
+      }
+
+      .logo-box {
+          background-color: #ffffff !important;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+          border: 1px solid #e1e3e5;
+      }
+  </style>
+</head>
+
+<body>
+  <div class="container-fluid nba-header position-fixed top-0 z-1 shadow-sm">
+    <div class="row">
+      <div class="col">
+        <div class="text-center display-6 text-white py-3 nba-title">Hoops</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mt-5 pt-5">
+    <a id="back" class="btn btn-nba-back my-3" href="index.html">Back</a>
+  </div>
+
+  <div class="container">
+    <div class="row" id="parent">
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+
+  <script>
+    const colors = {
+      Eastern: '#DEF3FD',
+      Western: '#FDDFDF',
+      none: '#F5F5F5',
+      lakers: '#552583',
+      celtics: '#007A33',
+      bulls: '#CE1141',
+      warriors: '#1D428A',
+      heat: '#98002E',
+      knicks: '#F58426',
+      nets: '#000000',
+      bucks: '#00471B',
+      suns: '#E56020',
+      mavericks: '#00538C',
+      sixers: '#006BB6',
+      '76ers': '#006BB6',
+      nuggets: '#0E2240',
+      clippers: '#C8102E',
+      raptors: '#CE1141',
+      spurs: '#C4CED4'
+    };
+
+    const nbaTeamIds = {
+      ATL: 1610612737, BOS: 1610612738, CLE: 1610612739, NOP: 1610612740,
+      CHI: 1610612741, DAL: 1610612742, DEN: 1610612743, GSW: 1610612744,
+      HOU: 1610612745, LAC: 1610612746, LAL: 1610612747, MIA: 1610612748,
+      MIL: 1610612749, MIN: 1610612750, BKN: 1610612751, NYK: 1610612752,
+      ORL: 1610612753, IND: 1610612754, PHI: 1610612755, PHX: 1610612756,
+      POR: 1610612757, SAC: 1610612758, SAS: 1610612759, OKC: 1610612760,
+      TOR: 1610612761, UTA: 1610612762, MEM: 1610612763, WAS: 1610612764,
+      DET: 1610612765, CHA: 1610612766
+    };
+
+    // in case the API uses a different abbreviation
+    const abbrAliases = { GS: 'GSW', NY: 'NYK', SA: 'SAS', NO: 'NOP', BK: 'BKN', PHO: 'PHX', UTAH: 'UTA', WSH: 'WAS', CHO: 'CHA', NOR: 'NOP' };
+
+    // returns the logo <img> html, or the abbreviation text if no logo is found
+    function logoHtml(abbreviation, size) {
+      var abbr = (abbreviation || '').toUpperCase();
+      abbr = abbrAliases[abbr] || abbr;
+      var teamId = nbaTeamIds[abbr];
+      if (!teamId) return abbreviation;
+      return `<img src="https://cdn.nba.com/logos/nba/${teamId}/global/L/logo.svg"
+                   alt="${abbreviation}" style="width:${size}px; height:${size}px; object-fit:contain;"
+                   onerror="this.replaceWith(document.createTextNode('${abbreviation}'))">`;
+    }
+
+    function capitalizeFirstLetter(str) {
+      if (!str) return str; // Handle empty strings safely
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    // element initializations
+    var elBack = document.getElementById("back");
+    var elParent = document.getElementById("parent");
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    var id = urlParams.get('id');
+    var page = urlParams.get('page');
+    if(page == null){
+      page = 1;
+    } else {
+      page = parseInt(page);
+    }
+
+    // go back to the same page of the list
+    elBack.href = 'index.html?page=' + page;
+
+    //api variables
+    var apiKey = 'DcjjykXhWaR67kcPOzmY8qsCrGeDG4UeYJI2nC9P';
+    var teamUrl = 'https://api.api-ninjas.com/v1/basketballteams?team=';
+    var playersUrl = 'https://api.api-ninjas.com/v1/basketballplayers?league=nba&team=';
+
+    const getTeam = async () => {
+      // Show loading spinner while fetching team & roster data
+      elParent.innerHTML = `
+        <div class="col-12 text-center py-5">
+          <div class="h3 my-3 text-muted" id="name">
+            <div class="spinner-border text-danger" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const response = await fetch(teamUrl + id, {
+        headers: { 'X-Api-Key': apiKey }
+      });
+      const result = await response.json();
+      const team = result[0];
+
+      var abbreviation = team.abbreviation;
+      var name = team.name;
+      var conference = team.conference;
+      var division = team.division;
+      var venue = team.venue.name + ', ' + team.venue.city + ', ' + team.venue.state;
+      var color = colors[conference] || colors.none;
+      var teamColor = colors[team.nickname.toLowerCase()] || '#212529';
+
+      elParent.innerHTML = `
+        <div class="col-12">
+          <div class="card nba-card shadow-sm p-3 d-flex flex-row align-items-center my-3">
+            <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold logo-box" style="width: 100px; height: 100px; color: `+teamColor+`;">
+              <span class="h3 m-0">`+logoHtml(abbreviation, 70)+`</span>
+            </div>
+            <div class="mx-4">
+              <div class="h2 my-0 team-heading" style="color: `+teamColor+`;">`+name+`</div>
+              <div class="text-muted">`+venue+`</div>
+            </div>
+            <div class="rounded-pill px-3 me-2 nba-badge" style="background-color: `+color+`;">`+capitalizeFirstLetter(conference)+`</div>
+            <div class="rounded-pill px-3 nba-badge-sub">`+division+`</div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="h4 mt-4 mb-3 section-heading">Roster</div>
+        </div>
+      `;
+
+      getPlayers(color, teamColor);
+    }
+
+    const getPlayers = async (color, teamColor) => {
+      const response = await fetch(playersUrl + id, {
+        headers: { 'X-Api-Key': apiKey }
+      });
+      const players = await response.json();
+
+      for(var i = 0; i < players.length; i++){
+        var player = players[i];
+
+        var name = player.name;
+        var jersey = player.jersey_number == null ? '-' : player.jersey_number;
+        var position = player.position == null ? 'N/A' : player.position;
+        var height = player.height_cm == null ? '-' : player.height_cm + ' cm';
+        var weight = player.weight_kg == null ? '-' : player.weight_kg + ' kg';
+        var college = player.college == null ? 'N/A' : player.college;
+
+        elParent.innerHTML += `
+          <div class="col-12">
+            <div class="card nba-card shadow-sm p-3 d-flex flex-row align-items-center my-2">
+              <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 50px; height: 50px; background-color: `+teamColor+`; color: #fff;">
+                `+jersey+`
+              </div>
+              <div class="h5 mx-4 my-0 flex-grow-1">`+name+`</div>
+              <div class="rounded-pill px-3 me-2 nba-badge" style="background-color: `+color+`;">`+position+`</div>
+              <div class="rounded-pill px-3 me-2 nba-badge-sub">`+height+`</div>
+              <div class="rounded-pill px-3 me-2 nba-badge-sub">`+weight+`</div>
+              <div class="rounded-pill px-3 nba-badge-sub">`+college+`</div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    getTeam();
+  </script>
+</body>
+
+</html>
